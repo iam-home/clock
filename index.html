@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CLOCK</title>
+</head>
+
+<style>
+.circle {
+    width: 100px;
+    height: 100px; /*여기 값 화면에 맞게 바꾸면 되지않을까 싶음*/
+    border: 1.5px solid black;
+    border-radius: 50%;
+}
+</style>
+
+<body>
+    
+    <div class="circle"></div>
+    
+    <script>
+        const now = new Date();
+        const seconds = now.getSeconds();
+        const minutes = now.getMinutes();
+        const hours = now.getHours();
+
+        setInterval(() => {
+            
+        }, 1000)
+    </script>
+</body>
+</html>
