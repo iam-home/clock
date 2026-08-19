@@ -1,32 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CLOCK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Analog Clock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #091921;
+            font-family: sans-serif;
+        }
+
+        /* Clock Outer Face */
+        .clock {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #091921 url('https://ibb.co') no-repeat center;
+            background-size: cover;
+            border: 4px solid #192a3a;
+            border-radius: 50%;
+            box-shadow: 0 -15px 15px rgba(255,255,255,0.05),
+                        inset 0 -15px 15px rgba(255,255,255,0.05),
+                        0 15px 15px rgba(0,0,0,0.3),
+                        inset 0 15px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Center Pivot Point */
+        .clock::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff2972;
+            border-radius: 50%;
+            z-index: 10000;
+        }
+
+        /* Generic Hand Containers */
+        .hand-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Individual Hands */
+        .hour-hand {
+            width: 8px;
+            height: 70px;
+            background: #fffd;
+            border-radius: 4px;
+            margin-top: 80px; /* Positions hand relative to center pivot */
+        }
+
+        .minute-hand {
+            width: 6px;
+            height: 100px;
+            background: #fffb;
+            border-radius: 3px;
+            margin-top: 50px;
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 120px;
+            background: #ff2972;
+            border-radius: 1px;
+            margin-top: 30px;
+        }
+    </style>
 </head>
-
-<style>
-.circle {
-    width: 100px;
-    height: 100px; /*여기 값 화면에 맞게 바꾸면 되지않을까 싶음*/
-    border: 1.5px solid black;
-    border-radius: 50%;
-}
-</style>
-
 <body>
-    
-    <div class="circle"></div>
-    
-    <script>
-        const now = new Date();
-        const seconds = now.getSeconds();
-        const minutes = now.getMinutes();
-        const hours = now.getHours();
 
-        setInterval(() => {
-            
-        }, 1000)
+    <div class="clock">
+        <div class="hand-container" id="hour"><div class="hour-hand"></div></div>
+        <div class="hand-container" id="minute"><div class="minute-hand"></div></div>
+        <div class="hand-container" id="second"><div class="second-hand"></div></div>
+    </div>
+
+    <button onclick="noSleep.enable();">noSleep</button>
+    <!-- 이게 맞음? -->
+
+    <script>
+        let noSleep = new NoSleep();
+        const hrHand = document.getElementById('hour');
+        const minHand = document.getElementById('minute');
+        const secHand = document.getElementById('second');
+
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Calculate precise rotational degrees
+            // 360 degrees / 12 hours = 30 degrees per hour + slight rotation based on minutes
+            const hrDegrees = (hours % 12) * 30 + (minutes / 60) * 30; 
+            // 360 degrees / 60 minutes = 6 degrees per minute
+            const minDegrees = minutes * 6; 
+            // 360 degrees / 60 seconds = 6 degrees per second
+            const secDegrees = seconds * 6; 
+
+            // Apply CSS transforms
+            hrHand.style.transform = `rotate(${hrDegrees}deg)`;
+            minHand.style.transform = `rotate(${minDegrees}deg)`;
+            secHand.style.transform = `rotate(${secDegrees}deg)`;
+        }
+
+        // Initialize clock instantly and update every 1 second
+        updateClock();
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
